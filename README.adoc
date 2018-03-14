@@ -61,7 +61,14 @@ Si todo ha ido bien podremos acceder a nuestra aplicación: http://localhost/
 
 En este ejemplo el fichero de configuración de apache es:
 
-include::basic/resources/config/000-default.conf[]
+----
+<VirtualHost *:*>
+    ProxyPreserveHost On
+    ProxyPass / http://0.0.0.0:8080/
+    ProxyPassReverse / http://0.0.0.0:8080/
+    ServerName localhost
+</VirtualHost>
+----
 
 === Ejecutando la imagen a través de un proxy
 
@@ -98,7 +105,28 @@ java -jar /opt/sample-app/http-network-diagnostic-1.0.3.jar
 
 En este ejemplo el fichero de configuración de apache es:
 
-[source]
 ----
-include::ssl/resources/config/sample-ssl.conf[]
+<VirtualHost *:443>
+    ServerName localhost
+
+    SSLEngine On
+    SSLProxyEngine On
+    SSLProxyCheckPeerCN Off
+    SSLCertificateFile	/root/certificate.pem
+    SSLCertificateKeyFile /root/key.pem
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+    ProxyPass / https://0.0.0.0:9009/
+    ProxyPassReverse / https://0.0.0.0:9009/
+
+    <Location />
+        ProxyPassReverse /
+        Options FollowSymLinks
+        Require all granted
+    </Location>
+
+</VirtualHost>
 ----
+
+Si accedemos a https://localhost veremos la página de Swagger de nuestra aplicación.
