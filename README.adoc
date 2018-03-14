@@ -1,0 +1,61 @@
+= Basic apache2 proxy example
+
+Ejemplo sencillo de como configurar una imagen docker para exponer una aplicación ejecutándose en
+el puerto 8080 a través de apache por el puerto 80
+
+Para ello en primer lugar generamos el Dockerfile a partir de una imagen de debian
+
+----
+FROM debian:8.10
+----
+
+Instalamos apache2 junto con el módulo mod_proxy y ruby para hacer de servidor de aplicación en el
+puerto 8080.
+Despues simplemente activamos el módulo y generamos la configuración de apache en
+`/etc/apache2/sites-enabled/000-default.conf`.
+
+Finalmente en el script de arranque arrancamos el servicio de apache2 e iniciamos nuestro servidor
+de ejemplo a través del script `entrypoint.sh`:
+
+----
+ruby -run -e httpd /opt/sample-app -p 8080
+----
+
+== Desplegando localmente la imagen
+
+En primer lugar ejecutaremos el script `docker-create-image.sh` que generará la imagen:
+
+----
+docker run \
+  --interactive \
+  --tty \
+  --name $IMAGE_NAME \
+  --hostname $IMAGE_NAME \
+  --publish 80:80 \
+  $IMAGE_USER/$IMAGE_NAME:${IMAGE_VERSION}
+----
+
+Una vez generada la imagen la arrancaremos con el script `docker-create-container.sh`
+
+----
+docker run \
+  --interactive \
+  --tty \
+  --name $IMAGE_NAME \
+  --hostname $IMAGE_NAME \
+  --publish 80:80 \
+  $IMAGE_USER/$IMAGE_NAME:${IMAGE_VERSION}
+----
+
+Si todo ha ido bien podremos acceder a nuestra aplicación: http://localhost/
+
+=== Ejecutando la imagen a través de un proxy
+
+En este caso hemos creado dos argumentos `IMAGE_PROXY` y `IMAGE_NO_PROXY` en nuestra imagen para
+aquellos casos en los que no tengamos salida directa a internet de tal modo que podremos generar la
+imagen pasando estos parámetros:
+
+----
+  --build-arg IMAGE_PROXY=$PROXY \
+  --build-arg IMAGE_NO_PROXY=$NO_PROXY \
+----
