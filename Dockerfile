@@ -25,18 +25,18 @@ RUN echo "root:changeit" | chpasswd && \
     curl \
     ruby \
     apache2 \
-		libapache2-mod-proxy-html \
-		libxml2-dev && \
+        libapache2-mod-proxy-html \
+        libxml2-dev && \
   a2enmod \
-	  proxy \
-		proxy_ajp \
-		proxy_http \
-		rewrite \
-		deflate \
-		headers \
-		proxy_balancer \
-		proxy_connect \
-		proxy_html && \
+      proxy \
+        proxy_ajp \
+        proxy_http \
+        rewrite \
+        deflate \
+        headers \
+        proxy_balancer \
+        proxy_connect \
+        proxy_html && \
   rm /etc/apache2/sites-enabled/000-default.conf && \
   echo "<VirtualHost *:*>" > /etc/apache2/sites-enabled/000-default.conf && \
   echo "  ProxyPreserveHost On" >> /etc/apache2/sites-enabled/000-default.conf && \

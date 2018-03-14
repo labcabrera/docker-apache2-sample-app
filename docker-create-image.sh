@@ -11,7 +11,6 @@ PROXY=$(prop 'http.proxy')
 NO_PROXY=$(prop 'http.no_proxy')
 
 echo "Building image $IMAGE_NAME:$IMAGE_VERSION"
-echo "Proxy: $PROXY No proxy: $NO_PROXY"
 
 docker build \
   -f Dockerfile \
