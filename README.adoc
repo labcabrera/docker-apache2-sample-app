@@ -1,4 +1,4 @@
-= Docker Apache examples
+= Ejempos de proxy inverso en contenedores docker
 
 Este proyecto contiene dos ejemplos de un contenedor que expone una serie de servicios a través de
 un proxy inverso utilizando apache2.
