@@ -1,4 +1,12 @@
-= Basic apache2 proxy example
+= Docker Apache examples
+
+Este proyecto contiene dos ejemplos de un contenedor que expone una serie de servicios a través de
+un proxy inverso utilizando apache2.
+
+El primer ejemplo consiste en exponer una aplicación a través del puerto 80, y en el segundo ejemplo
+realizaremos el proxy de una aplicación que utiliza SSL. 
+
+== Ejemplo básico
 
 Ejemplo sencillo de como configurar una imagen docker para exponer una aplicación ejecutándose en
 el puerto 8080 a través de apache por el puerto 80
@@ -21,7 +29,7 @@ de ejemplo a través del script `entrypoint.sh`:
 ruby -run -e httpd /opt/sample-app -p 8080
 ----
 
-== Desplegando localmente la imagen
+=== Desplegando localmente la imagen
 
 En primer lugar ejecutaremos el script `docker-create-image.sh` que generará la imagen:
 
@@ -49,6 +57,15 @@ docker run \
 
 Si todo ha ido bien podremos acceder a nuestra aplicación: http://localhost/
 
+=== Configuración de apache
+
+En este ejemplo el fichero de configuración de apache es:
+
+.basic/resources/config/000-default.conf
+----
+include::basic/resources/config/000-default.conf[]
+----
+
 === Ejecutando la imagen a través de un proxy
 
 En este caso hemos creado dos argumentos `IMAGE_PROXY` y `IMAGE_NO_PROXY` en nuestra imagen para
@@ -58,4 +75,33 @@ imagen pasando estos parámetros:
 ----
   --build-arg IMAGE_PROXY=$PROXY \
   --build-arg IMAGE_NO_PROXY=$NO_PROXY \
+----
+
+== Ejemplo utilizando SSL
+
+En el segundo ejemplo expondremos un microservicio que escucha en el puerto 9009 usando su propia
+configuración de SSL.
+
+En este caso es una aplicación Spring Boot de ejemplo (https://github.com/labcabrera/http-network-diagnostic/).
+
+Básicamente es igual que la anterior exceptuando que la imagen la hemos generado a partir de
+
+----
+FROM openjdk:8u151-jdk
+----
+
+para evitar instalar la JDK. Después tendremos que copiar el certificado y la clave privada para
+la configuración de SSL de apache. También cambiaremos nuestro `entrypoint.sh` para tener:
+
+----
+java -jar /opt/sample-app/http-network-diagnostic-1.0.3.jar
+----
+
+=== Configuración de apache
+
+En este ejemplo el fichero de configuración de apache es:
+
+.basic/resources/config/sample-ssl.conf
+----
+include::ssl/resources/config/sample-ssl.conf[]
 ----
