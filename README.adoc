@@ -1,12 +1,13 @@
 = Ejempos de proxy inverso en contenedores docker
 
-Este proyecto contiene dos ejemplos de un contenedor que expone una serie de servicios a través de
-un proxy inverso utilizando apache2.
+Este proyecto contiene un par de ejemplos de uso de proxy inverso utilizando apache2 en
+contenedores docker.
 
-El primer ejemplo consiste en exponer una aplicación a través del puerto 80, y en el segundo ejemplo
-realizaremos el proxy de una aplicación que utiliza SSL. 
+El primer ejemplo consistirá en exponer por el puerto 80 una aplicacion que escucha por HTTP
+en el puerto 8080. En el segundo expondremos una aplicacion que internamente utiza HTTPS para
+exponerla por el puerto 443.
 
-== Ejemplo básico
+== Ejemplo usando HTTP
 
 Ejemplo sencillo de como configurar una imagen docker para exponer una aplicación ejecutándose en
 el puerto 8080 a través de apache por el puerto 80
@@ -81,7 +82,7 @@ imagen pasando estos parámetros:
 --build-arg IMAGE_NO_PROXY=$NO_PROXY \
 ----
 
-== Ejemplo utilizando SSL
+== Ejemplo usando HTTPS
 
 En el segundo ejemplo expondremos un microservicio que escucha en el puerto 9009 usando su propia
 configuración de SSL.
