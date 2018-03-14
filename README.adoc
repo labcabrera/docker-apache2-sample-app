@@ -61,10 +61,7 @@ Si todo ha ido bien podremos acceder a nuestra aplicación: http://localhost/
 
 En este ejemplo el fichero de configuración de apache es:
 
-.basic/resources/config/000-default.conf
-----
 include::basic/resources/config/000-default.conf[]
-----
 
 === Ejecutando la imagen a través de un proxy
 
@@ -73,8 +70,8 @@ aquellos casos en los que no tengamos salida directa a internet de tal modo que 
 imagen pasando estos parámetros:
 
 ----
-  --build-arg IMAGE_PROXY=$PROXY \
-  --build-arg IMAGE_NO_PROXY=$NO_PROXY \
+--build-arg IMAGE_PROXY=$PROXY \
+--build-arg IMAGE_NO_PROXY=$NO_PROXY \
 ----
 
 == Ejemplo utilizando SSL
@@ -101,7 +98,4 @@ java -jar /opt/sample-app/http-network-diagnostic-1.0.3.jar
 
 En este ejemplo el fichero de configuración de apache es:
 
-.basic/resources/config/sample-ssl.conf
-----
 include::ssl/resources/config/sample-ssl.conf[]
-----
