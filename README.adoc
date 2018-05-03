@@ -221,22 +221,59 @@ root@apache-sample-cache:/tmp/cache# tree .
 ----
 
 Y como hemos establecido el log a nivel de debug comprobaremos que al servir las peticiones recurre
-a la caché en lugar de realizar la llamada a nuestra aplicación:
+a la caché en lugar de realizar la llamada https://localhost/webjars/springfox-swagger-ui/swagger-ui-bundle.js
+a nuestra aplicación
+
+Primera llamada:
+
 
 ----
-[Thu May 03 10:57:09.268606 2018] [ssl:info] [pid 37:tid 139774954211072] [client 172.17.0.1:48190] AH01964: Connection to child 88 established (server localhost:443)
-[Thu May 03 10:57:09.268907 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2115): [client 172.17.0.1:48190] AH02043: SSL virtual host for servername localhost found
-[Thu May 03 10:57:09.268939 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2115): [client 172.17.0.1:48190] AH02043: SSL virtual host for servername localhost found
-[Thu May 03 10:57:09.268947 2018] [core:debug] [pid 37:tid 139774954211072] protocol.c(2219): [client 172.17.0.1:48190] AH03155: select protocol from , choices=h2,http/1.1 for server localhost
-[Thu May 03 10:57:09.269898 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2042): [client 172.17.0.1:48190] AH02041: Protocol: TLSv1.2, Cipher: ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
-[Thu May 03 10:57:09.270415 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(366): [client 172.17.0.1:48190] AH02034: Initial (No.1) HTTPS request received for child 88 (server localhost:443)
-[Thu May 03 10:57:09.270484 2018] [authz_core:debug] [pid 37:tid 139774954211072] mod_authz_core.c(809): [client 172.17.0.1:48190] AH01626: authorization result of Require all granted: granted
-[Thu May 03 10:57:09.270493 2018] [authz_core:debug] [pid 37:tid 139774954211072] mod_authz_core.c(809): [client 172.17.0.1:48190] AH01626: authorization result of <RequireAny>: granted
-[Thu May 03 10:57:09.270536 2018] [cache:debug] [pid 37:tid 139774954211072] cache_storage.c(666): [client 172.17.0.1:48190] AH00698: cache: Key for entity /webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT is https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
-[Thu May 03 10:57:09.270599 2018] [cache_disk:debug] [pid 37:tid 139774954211072] mod_cache_disk.c(573): [client 172.17.0.1:48190] AH00709: Recalled cached URL info header https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
-[Thu May 03 10:57:09.270612 2018] [cache_disk:debug] [pid 37:tid 139774954211072] mod_cache_disk.c(897): [client 172.17.0.1:48190] AH00720: Recalled headers for URL https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
-[Thu May 03 10:57:14.180226 2018] [ssl:debug] [pid 37:tid 139774945818368] ssl_engine_io.c(1044): [remote 172.17.0.1:48190] AH02001: Connection closed to child 88 with standard shutdown (server localhost:443)
+[Thu May 03 11:04:34.595745 2018] [ssl:info] [pid 37:tid 139775147243264] [client 172.17.0.1:48262] AH01964: Connection to child 65 established (server localhost:443)
+[Thu May 03 11:04:34.595962 2018] [socache_shmcb:debug] [pid 37:tid 139775147243264] mod_socache_shmcb.c(532): AH00835: socache_shmcb_retrieve (0x8e -> subcache 14)
+[Thu May 03 11:04:34.595978 2018] [socache_shmcb:debug] [pid 37:tid 139775147243264] mod_socache_shmcb.c(917): AH00851: shmcb_subcache_retrieve found no match
+[Thu May 03 11:04:34.595983 2018] [socache_shmcb:debug] [pid 37:tid 139775147243264] mod_socache_shmcb.c(542): AH00836: leaving socache_shmcb_retrieve successfully
+[Thu May 03 11:04:34.596005 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(2115): [client 172.17.0.1:48262] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 11:04:34.596051 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(2115): [client 172.17.0.1:48262] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 11:04:34.596060 2018] [core:debug] [pid 37:tid 139775147243264] protocol.c(2219): [client 172.17.0.1:48262] AH03155: select protocol from , choices=h2,http/1.1 for server localhost
+[Thu May 03 11:04:34.602947 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(2042): [client 172.17.0.1:48262] AH02041: Protocol: TLSv1.2, Cipher: ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
+[Thu May 03 11:04:34.604011 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(366): [client 172.17.0.1:48262] AH02034: Initial (No.1) HTTPS request received for child 65 (server localhost:443)
+[Thu May 03 11:04:34.604064 2018] [authz_core:debug] [pid 37:tid 139775147243264] mod_authz_core.c(809): [client 172.17.0.1:48262] AH01626: authorization result of Require all granted: granted
+[Thu May 03 11:04:34.604071 2018] [authz_core:debug] [pid 37:tid 139775147243264] mod_authz_core.c(809): [client 172.17.0.1:48262] AH01626: authorization result of <RequireAny>: granted
+[Thu May 03 11:04:34.604104 2018] [cache:debug] [pid 37:tid 139775147243264] cache_storage.c(666): [client 172.17.0.1:48262] AH00698: cache: Key for entity /webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT is https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
+[Thu May 03 11:04:34.604218 2018] [cache:debug] [pid 37:tid 139775147243264] mod_cache.c(507): [client 172.17.0.1:48262] AH00757: Adding CACHE_SAVE filter for /webjars/springfox-swagger-ui/swagger-ui-bundle.js
+[Thu May 03 11:04:34.604229 2018] [cache:debug] [pid 37:tid 139775147243264] mod_cache.c(541): [client 172.17.0.1:48262] AH00759: Adding CACHE_REMOVE_URL filter for /webjars/springfox-swagger-ui/swagger-ui-bundle.js
+[Thu May 03 11:04:34.604252 2018] [proxy:debug] [pid 37:tid 139775147243264] mod_proxy.c(1228): [client 172.17.0.1:48262] AH01143: Running scheme https handler (attempt 0)
+[Thu May 03 11:04:34.604259 2018] [proxy_ajp:debug] [pid 37:tid 139775147243264] mod_proxy_ajp.c(738): [client 172.17.0.1:48262] AH00894: declining URL https://0.0.0.0:9009/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
+[Thu May 03 11:04:34.604267 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2156): AH00942: HTTPS: has acquired connection for (0.0.0.0)
+[Thu May 03 11:04:34.604274 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2209): [client 172.17.0.1:48262] AH00944: connecting https://0.0.0.0:9009/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT to 0.0.0.0:9009
+[Thu May 03 11:04:34.604280 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2418): [client 172.17.0.1:48262] AH00947: connected /webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT to 0.0.0.0:9009
+[Thu May 03 11:04:34.604437 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2716): AH00951: HTTPS: backend socket is disconnected.
+[Thu May 03 11:04:34.604496 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2884): AH02824: HTTPS: connection established with 0.0.0.0:9009 (0.0.0.0)
+[Thu May 03 11:04:34.604509 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(3051): AH00962: HTTPS: connection complete to 0.0.0.0:9009 (0.0.0.0)
+[Thu May 03 11:04:34.604515 2018] [ssl:info] [pid 37:tid 139775147243264] [remote 127.0.0.1:9009] AH01964: Connection to child 0 established (server localhost:443)
+[Thu May 03 11:04:34.622505 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(1568): [remote 127.0.0.1:9009] AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: emailAddress=lab.cabrera@gmail.com,CN=training,OU=Arquitectura,O=Mapfre,L=Majadahonda,ST=Madrid,C=ES / issuer: emailAddress=lab.cabrera@gmail.com,CN=training,OU=Arquitectura,O=Mapfre,L=Majadahonda,ST=Madrid,C=ES / serial: C7ED840F041E1CE9 / notbefore: Mar  6 09:33:04 2018 GMT / notafter: Mar  6 09:33:04 2019 GMT]
+[Thu May 03 11:04:34.622561 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(1568): [remote 127.0.0.1:9009] AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: emailAddress=lab.cabrera@gmail.com,CN=training,OU=Arquitectura,O=Mapfre,L=Majadahonda,ST=Madrid,C=ES / issuer: emailAddress=lab.cabrera@gmail.com,CN=training,OU=Arquitectura,O=Mapfre,L=Majadahonda,ST=Madrid,C=ES / serial: C7ED840F041E1CE9 / notbefore: Mar  6 09:33:04 2018 GMT / notafter: Mar  6 09:33:04 2019 GMT]
+[Thu May 03 11:04:34.628611 2018] [ssl:debug] [pid 37:tid 139775147243264] ssl_engine_kernel.c(2042): [remote 127.0.0.1:9009] AH02041: Protocol: TLSv1.2, Cipher: ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits)
+[Thu May 03 11:04:34.804433 2018] [proxy:debug] [pid 37:tid 139775147243264] proxy_util.c(2171): AH00943: https: has released connection for (0.0.0.0)
+[Thu May 03 11:04:34.804487 2018] [cache:debug] [pid 37:tid 139775147243264] mod_cache.c(1229): [client 172.17.0.1:48262] AH00768: cache: https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT not cached for request /webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT. Reason: HTTP Status 304 Not Modified
+[Thu May 03 11:04:39.707872 2018] [ssl:debug] [pid 37:tid 139774945818368] ssl_engine_io.c(1044): [remote 172.17.0.1:48262] AH02001: Connection closed to child 65 with standard shutdown (server localhost:443)
+----
 
+Llamadas posteriores
+
+----
+[Thu May 03 11:09:23.124192 2018] [ssl:debug] [pid 351:tid 140415600604928] ssl_engine_io.c(1044): [remote 172.17.0.1:48322] AH02001: Connection closed to child 65 with standard shutdown (server localhost:443)
+[Thu May 03 11:09:27.493704 2018] [ssl:info] [pid 350:tid 140415869011712] [client 172.17.0.1:48326] AH01964: Connection to child 2 established (server localhost:443)
+[Thu May 03 11:09:27.493950 2018] [ssl:debug] [pid 350:tid 140415869011712] ssl_engine_kernel.c(2115): [client 172.17.0.1:48326] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 11:09:27.493971 2018] [ssl:debug] [pid 350:tid 140415869011712] ssl_engine_kernel.c(2115): [client 172.17.0.1:48326] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 11:09:27.493976 2018] [core:debug] [pid 350:tid 140415869011712] protocol.c(2219): [client 172.17.0.1:48326] AH03155: select protocol from , choices=h2,http/1.1 for server localhost
+[Thu May 03 11:09:27.494496 2018] [ssl:debug] [pid 350:tid 140415869011712] ssl_engine_kernel.c(2042): [client 172.17.0.1:48326] AH02041: Protocol: TLSv1.2, Cipher: ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
+[Thu May 03 11:09:27.494596 2018] [ssl:debug] [pid 350:tid 140415869011712] ssl_engine_kernel.c(366): [client 172.17.0.1:48326] AH02034: Initial (No.1) HTTPS request received for child 2 (server localhost:443)
+[Thu May 03 11:09:27.494628 2018] [authz_core:debug] [pid 350:tid 140415869011712] mod_authz_core.c(809): [client 172.17.0.1:48326] AH01626: authorization result of Require all granted: granted
+[Thu May 03 11:09:27.494634 2018] [authz_core:debug] [pid 350:tid 140415869011712] mod_authz_core.c(809): [client 172.17.0.1:48326] AH01626: authorization result of <RequireAny>: granted
+[Thu May 03 11:09:27.494679 2018] [cache:debug] [pid 350:tid 140415869011712] cache_storage.c(666): [client 172.17.0.1:48326] AH00698: cache: Key for entity /webjars/springfox-swagger-ui/swagger-ui-bundle.js?(null) is https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?
+[Thu May 03 11:09:27.494741 2018] [cache_disk:debug] [pid 350:tid 140415869011712] mod_cache_disk.c(573): [client 172.17.0.1:48326] AH00709: Recalled cached URL info header https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?
+[Thu May 03 11:09:27.494753 2018] [cache_disk:debug] [pid 350:tid 140415869011712] mod_cache_disk.c(897): [client 172.17.0.1:48326] AH00720: Recalled headers for URL https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?
 ----
 
 Si modificamos el fichero _/opt/sample-app/hello.html_ veremos que el apache sigue sirviendo el
@@ -255,5 +292,5 @@ root       158   106  0 09:44 pts/1    00:00:00 grep cache
 
 Para saber más consultar la documentación oficial:
 
-* https://httpd.apache.org/docs/2.4/mod/mod_cache.html#cachelock
+* https://httpd.apache.org/docs/2.4/mod/mod_cache.html
 * http://httpd.apache.org/docs/2.2/mod/mod_disk_cache.html
