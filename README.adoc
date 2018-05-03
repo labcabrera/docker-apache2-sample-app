@@ -216,20 +216,22 @@ Y como hemos establecido el log a nivel de debug comprobaremos que al servir las
 a la caché en lugar de realizar la llamada a nuestra aplicación:
 
 ----
-[Thu May 03 09:10:37.008909 2018] [authz_core:debug] [pid 1263:tid 139943938004736] mod_authz_core.c(835): [client 172.17.0.1:55728] AH01628: authorization result: granted (no directives)
-[Thu May 03 09:10:37.009031 2018] [cache:debug] [pid 1263:tid 139943938004736] cache_storage.c(664): [client 172.17.0.1:55728] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
-[Thu May 03 09:10:37.009169 2018] [cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(572): [client 172.17.0.1:55728] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
-[Thu May 03 09:10:37.009209 2018] [cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(885): [client 172.17.0.1:55728] AH00720: Recalled headers for URL http://localhost:80/hello.html?
-[Thu May 03 09:10:37.009259 2018] [cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(652): [client 172.17.0.1:55728] AH00763: cache: running CACHE_OUT filter
-[Thu May 03 09:10:37.009271 2018] [cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(681): [client 172.17.0.1:55728] AH00764: cache: serving /hello.html
-[Thu May 03 09:11:15.671044 2018] [authz_core:debug] [pid 1263:tid 139943808571136] mod_authz_core.c(835): [client 172.17.0.1:55734] AH01628: authorization result: granted (no directives)
-[Thu May 03 09:11:15.671152 2018] [cache:debug] [pid 1263:tid 139943808571136] cache_storage.c(664): [client 172.17.0.1:55734] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
-[Thu May 03 09:11:15.671229 2018] [cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(572): [client 172.17.0.1:55734] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
-[Thu May 03 09:11:15.671244 2018] [cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(885): [client 172.17.0.1:55734] AH00720: Recalled headers for URL http://localhost:80/hello.html?
-[Thu May 03 09:11:15.671264 2018] [cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(652): [client 172.17.0.1:55734] AH00763: cache: running CACHE_OUT filter
-[Thu May 03 09:11:15.671272 2018] [cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(681): [client 172.17.0.1:55734] AH00764: cache: serving /hello.html
+[authz_core:debug] [pid 1263:tid 139943938004736] mod_authz_core.c(835): [client 172.17.0.1:55728] AH01628: authorization result: granted (no directives)
+[cache:debug] [pid 1263:tid 139943938004736] cache_storage.c(664): [client 172.17.0.1:55728] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
+[cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(572): [client 172.17.0.1:55728] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
+[cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(885): [client 172.17.0.1:55728] AH00720: Recalled headers for URL http://localhost:80/hello.html?
+[cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(652): [client 172.17.0.1:55728] AH00763: cache: running CACHE_OUT filter
+[cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(681): [client 172.17.0.1:55728] AH00764: cache: serving /hello.html
+[authz_core:debug] [pid 1263:tid 139943808571136] mod_authz_core.c(835): [client 172.17.0.1:55734] AH01628: authorization result: granted (no directives)
+[cache:debug] [pid 1263:tid 139943808571136] cache_storage.c(664): [client 172.17.0.1:55734] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
+[cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(572): [client 172.17.0.1:55734] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
+[cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(885): [client 172.17.0.1:55734] AH00720: Recalled headers for URL http://localhost:80/hello.html?
+[cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(652): [client 172.17.0.1:55734] AH00763: cache: running CACHE_OUT filter
+[cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(681): [client 172.17.0.1:55734] AH00764: cache: serving /hello.html
 ----
 
+Si modificamos el fichero _/opt/sample-app/hello.html_ veremos que el apache sigue sirviendo el
+mismo contenido con la configuración que hemos establecido.
 
 Para saber más consultar la documentación oficial:
 
