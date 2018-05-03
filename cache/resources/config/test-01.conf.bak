@@ -1,0 +1,76 @@
+<VirtualHost *:*>
+
+  ServerName localhost
+
+  # Cache
+  CacheEnable disk /app
+  CacheRoot /tmp/cache/mod_cache
+  #CacheIgnoreNoLastMod On
+  #CacheDefaultExpire 86400
+  #CacheDirLevels 5
+  #CacheDirLength 3
+
+  #CacheMaxExpire 900
+  #CacheMaxFileSize 2000000
+  #ExpiresActive on
+  #ExpiresDefault "access plus 10 minutes"
+  #CacheIgnoreNoLastMod On
+  #CacheIgnoreQueryString On
+  #CacheIgnoreCacheControl On
+  #CacheIgnoreHeaders Set-Cookie
+
+  #Header unset Expires
+  #Header unset Cache-Control
+  #Header unset Pragma
+
+  # Insane log just for check cache
+  LogLevel debug
+
+
+  # Deflate
+  DeflateCompressionLevel 3
+  SetOutputFilter DEFLATE
+
+  <Location "/app">
+    # Proxy
+    ProxyPreserveHost On
+    #ProxyRequests On
+    ProxyPass http://0.0.0.0:8080/
+    ProxyPassReverse http://0.0.0.0:8080/
+  </Location>
+
+  #DocumentRoot /var/www/html
+
+  #ErrorLog ${APACHE_LOG_DIR}/error.log
+  #CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+  #DeflateCompressionLevel 3
+
+
+  #CacheQuickHandler off
+  #CacheLock on
+  #CacheLockPath /tmp/cache/mod_cache-lock
+  #CacheLockMaxAge 5
+  #CacheIgnoreHeaders Set-Cookie
+
+  #CacheIgnoreQueryString On
+  #CacheIgnoreCacheControl On
+  #CacheIgnoreHeaders Set-Cookie
+
+
+  #<Location "/">
+    #SetOutputFilter DEFLATE
+
+    #CacheHeader on
+    #CacheDefaultExpire 900
+    #CacheMaxFileSize 2000000
+    #CacheMaxExpire 64000
+    #CacheIgnoreNoLastMod On
+    #ExpiresActive On
+    # ExpiresDefault A300
+    #ExpiresDefault "access plus 10 minutes"
+
+    #Header unset Pragma
+  #</Location>
+
+</VirtualHost>

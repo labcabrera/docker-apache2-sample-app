@@ -131,3 +131,15 @@ En este ejemplo el fichero de configuración de apache es:
 ----
 
 Si accedemos a https://localhost veremos la página de Swagger de nuestra aplicación.
+
+== Ejemplo utilizando disk cache
+
+Este ejemplo es una extensión de la primera imagen en la que utilizaremos la cache en disco.
+
+TODO: cambio en el entrypoint: service apache-htcacheclean start
+
+http://www.vicente-navarro.com/blog/2007/12/02/usando-el-mod_cache-de-apache-para-que-el-mod_deflate-no-incremente-la-carga-del-servidor/
+
+https://httpd.apache.org/docs/2.4/mod/mod_cache.html#cachelock
+
+http://httpd.apache.org/docs/2.2/mod/mod_disk_cache.html
