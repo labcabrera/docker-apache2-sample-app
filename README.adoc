@@ -233,6 +233,17 @@ a la caché en lugar de realizar la llamada a nuestra aplicación:
 Si modificamos el fichero _/opt/sample-app/hello.html_ veremos que el apache sigue sirviendo el
 mismo contenido con la configuración que hemos establecido.
 
+Para tener controlada nuestra cache podemos utilizar el binario _htcacheclean_ que se encarga
+periodicamente de controlar el tamaño de nuestra caché:
+
+----
+$ htcacheclean -t -n -d1 -p /tmp/cache/mod_cache -l4000M
+$ ps -fea | grep cache
+root       156     0  0 09:43 ?        00:00:00 htcacheclean -t -n -d1 -p /tmp/cache/mod_cache -l4000M
+root       158   106  0 09:44 pts/1    00:00:00 grep cache
+----
+
+
 Para saber más consultar la documentación oficial:
 
 * https://httpd.apache.org/docs/2.4/mod/mod_cache.html#cachelock
