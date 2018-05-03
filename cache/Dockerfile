@@ -45,8 +45,8 @@ RUN echo "root:changeit" | chpasswd && \
   echo "alias ll='ls -Alh'" >> /root/.bashrc && \
   mkdir -p /tmp/cache/mod_cache && \
   mkdir -p /tmp/cache/mod_cache_lock && \
-  chmod -R /tmp/cache/mod_cache && \
-  chmod -R /tmp/cache/mod_cache_lock
+  chmod 777 /tmp/cache/mod_cache && \
+  chmod 777 /tmp/cache/mod_cache_lock
 
 #cache \
 
