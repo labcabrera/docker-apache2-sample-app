@@ -136,10 +136,89 @@ Si accedemos a https://localhost veremos la página de Swagger de nuestra aplica
 
 Este ejemplo es una extensión de la primera imagen en la que utilizaremos la cache en disco.
 
-TODO: cambio en el entrypoint: service apache-htcacheclean start
+Para ello instalaremos el módulo _cache_disk_ y lo activaremos a través del comando:
 
-http://www.vicente-navarro.com/blog/2007/12/02/usando-el-mod_cache-de-apache-para-que-el-mod_deflate-no-incremente-la-carga-del-servidor/
+----
+a2enmod cache_disk
+----
 
-https://httpd.apache.org/docs/2.4/mod/mod_cache.html#cachelock
+Después modificaremos nuestro fichero de configuración de apache para incluir la siguiente
+configuración:
 
-http://httpd.apache.org/docs/2.2/mod/mod_disk_cache.html
+----
+CacheQuickHandler off
+CacheLock on
+CacheRoot /tmp/cache/mod_cache
+CacheLockPath /tmp/cache/mod_cache_lock
+CacheIgnoreCacheControl on
+CacheMaxFileSize 100000000
+CacheIgnoreNoLastMod On
+CacheMaxExpire 1209600
+CacheIgnoreQueryString On
+----
+
+Y activaremos este módulo para nuestro proxy inverso con la aplicación de Ruby que ejecutamos
+localmente:
+
+----
+<Location "/">
+  # Proxy
+  ProxyPreserveHost On
+  ProxyPass http://0.0.0.0:8080/
+  ProxyPassReverse http://0.0.0.0:8080/
+  # Cache
+  CacheEnable disk
+  CacheHeader on
+</Location>
+----
+
+Al arrancar la imagen podremos comprobar el funcionamiento realizando peticiones a:
+
+http://localhost/hello.html
+
+Si entramos en el contenedor veremos que ha creado la siguiente estructura de directorios:
+
+----
+root@apache-sample-cache:/tmp/cache# tree .
+.
+|-- mod_cache
+|   `-- P_
+|       `-- 1F
+|           |-- YkhbG@j6QMia_ljSOA.header
+|           `-- YkhbG@j6QMia_ljSOA.header.vary
+|               `-- TY
+|                   `-- Ri
+|                       |-- yWlQJQ@E7SX2b9E3FQ.data
+|                       `-- yWlQJQ@E7SX2b9E3FQ.header
+`-- mod_cache_lock
+    `-- P
+        `-- _
+----
+
+Y como hemos establecido el log a nivel de debug comprobaremos que al servir las peticiones recurre
+a la caché en lugar de realizar la llamada a nuestra aplicación:
+
+----
+[authz_core:debug] [pid 770:tid 140452264015616] mod_authz_core.c(835): [client 172.17.0.1:55388] AH01628: authorization result: granted (no directives)
+[cache:debug] [pid 770:tid 140452264015616] cache_storage.c(664): [client 172.17.0.1:55388] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
+[cache_disk:debug] [pid 770:tid 140452264015616] mod_cache_disk.c(572): [client 172.17.0.1:55388] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
+[cache_disk:debug] [pid 770:tid 140452264015616] mod_cache_disk.c(885): [client 172.17.0.1:55388] AH00720: Recalled headers for URL http://localhost:80/hello.html?
+[cache:debug] [pid 770:tid 140452264015616] mod_cache.c(502): [client 172.17.0.1:55388] AH00757: Adding CACHE_SAVE filter for /hello.html
+[cache:debug] [pid 770:tid 140452264015616] mod_cache.c(536): [client 172.17.0.1:55388] AH00759: Adding CACHE_REMOVE_URL filter for /hello.html
+[proxy:debug] [pid 770:tid 140452264015616] mod_proxy.c(1155): [client 172.17.0.1:55388] AH01143: Running scheme http handler (attempt 0)
+[proxy_ajp:debug] [pid 770:tid 140452264015616] mod_proxy_ajp.c(713): [client 172.17.0.1:55388] AH00894: declining URL http://0.0.0.0:8080/hello.html
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2131): AH00942: HTTP: has acquired connection for (0.0.0.0)
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2184): [client 172.17.0.1:55388] AH00944: connecting http://0.0.0.0:8080/hello.html to 0.0.0.0:8080
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2385): [client 172.17.0.1:55388] AH00947: connected /hello.html to 0.0.0.0:8080
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2621): AH00951: HTTP: backend socket is disconnected.
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2873): AH00962: HTTP: connection complete to 0.0.0.0:8080 (0.0.0.0)
+[proxy:debug] [pid 770:tid 140452264015616] proxy_util.c(2146): AH00943: http: has released connection for (0.0.0.0)
+[cache:debug] [pid 770:tid 140452264015616] mod_cache.c(1332): [client 172.17.0.1:55388] AH00769: cache: Caching url: /hello.html
+[cache:debug] [pid 770:tid 140452264015616] mod_cache.c(1338): [client 172.17.0.1:55388] AH00770: cache: Removing CACHE_REMOVE_URL filter.
+[cache_disk:debug] [pid 770:tid 140452264015616] mod_cache_disk.c(1350): [client 172.17.0.1:55388] AH00737: commit_entity: Headers and body for URL http://localhost:80/hello.html? cached.
+----
+
+Para saber más consultar la documentación oficial:
+
+* https://httpd.apache.org/docs/2.4/mod/mod_cache.html#cachelock
+* http://httpd.apache.org/docs/2.2/mod/mod_disk_cache.html
