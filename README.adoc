@@ -134,7 +134,8 @@ Si accedemos a https://localhost veremos la página de Swagger de nuestra aplica
 
 == Ejemplo utilizando disk cache
 
-Este ejemplo es una extensión de la primera imagen en la que utilizaremos la cache en disco.
+Este ejemplo es una extensión de la segunda imagen en la que utilizaremos la cache en disco para
+servir el contenido estático (en la aplicación de ejemplo esto serán los recursos de swagger).
 
 Para ello instalaremos el módulo _cache_disk_ y lo activaremos a través del comando:
 
@@ -179,11 +180,7 @@ localmente:
 
 ----
 <Location "/">
-  # Proxy
-  ProxyPreserveHost On
-  ProxyPass http://0.0.0.0:8080/
-  ProxyPassReverse http://0.0.0.0:8080/
-  # Cache
+  ...
   CacheEnable disk
   CacheHeader on
 </Location>
@@ -191,43 +188,55 @@ localmente:
 
 Al arrancar la imagen podremos comprobar el funcionamiento realizando peticiones a:
 
-http://localhost/hello.html
+https://localhost/swagger-ui.html
 
 Si entramos en el contenedor veremos que ha creado la siguiente estructura de directorios:
 
 ----
 root@apache-sample-cache:/tmp/cache# tree .
 .
-|-- mod_cache
-|   `-- P_
-|       `-- 1F
-|           |-- YkhbG@j6QMia_ljSOA.header
-|           `-- YkhbG@j6QMia_ljSOA.header.vary
-|               `-- TY
-|                   `-- Ri
-|                       |-- yWlQJQ@E7SX2b9E3FQ.data
-|                       `-- yWlQJQ@E7SX2b9E3FQ.header
-`-- mod_cache_lock
-    `-- P
-        `-- _
+├── mod_cache
+│   ├── 0D
+│   │   └── @R
+│   │       ├── A48aZby4l4TdtVbwdA.header
+│   │       └── A48aZby4l4TdtVbwdA.header.vary
+│   │           └── 1k
+│   │               └── cF
+│   │                   ├── 9cMtUUJYyh4n5gv39Q.data
+│   │                   └── 9cMtUUJYyh4n5gv39Q.header
+│   ├── 7T
+│   │   └── @A
+│   │       ├── Ddpii7mknOHLaj4umw.header
+│   │       └── Ddpii7mknOHLaj4umw.header.vary
+│   │           └── 9N
+│   │               └── TK
+│   │                   ├── 0YcoBvhzQwYfN3SosA.data
+│   │                   └── 0YcoBvhzQwYfN3SosA.header
+│   ├── Bs
+│   │   └── 0p
+│   │       ├── _wNe0@Rarv4M3JXWUQ.header
+│   │       └── _wNe0@Rarv4M3JXWUQ.header.vary
+│   │           └── mh
+...
 ----
 
 Y como hemos establecido el log a nivel de debug comprobaremos que al servir las peticiones recurre
 a la caché en lugar de realizar la llamada a nuestra aplicación:
 
 ----
-[authz_core:debug] [pid 1263:tid 139943938004736] mod_authz_core.c(835): [client 172.17.0.1:55728] AH01628: authorization result: granted (no directives)
-[cache:debug] [pid 1263:tid 139943938004736] cache_storage.c(664): [client 172.17.0.1:55728] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
-[cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(572): [client 172.17.0.1:55728] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
-[cache_disk:debug] [pid 1263:tid 139943938004736] mod_cache_disk.c(885): [client 172.17.0.1:55728] AH00720: Recalled headers for URL http://localhost:80/hello.html?
-[cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(652): [client 172.17.0.1:55728] AH00763: cache: running CACHE_OUT filter
-[cache:debug] [pid 1263:tid 139943938004736] mod_cache.c(681): [client 172.17.0.1:55728] AH00764: cache: serving /hello.html
-[authz_core:debug] [pid 1263:tid 139943808571136] mod_authz_core.c(835): [client 172.17.0.1:55734] AH01628: authorization result: granted (no directives)
-[cache:debug] [pid 1263:tid 139943808571136] cache_storage.c(664): [client 172.17.0.1:55734] AH00698: cache: Key for entity /hello.html?(null) is http://localhost:80/hello.html?
-[cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(572): [client 172.17.0.1:55734] AH00709: Recalled cached URL info header http://localhost:80/hello.html?
-[cache_disk:debug] [pid 1263:tid 139943808571136] mod_cache_disk.c(885): [client 172.17.0.1:55734] AH00720: Recalled headers for URL http://localhost:80/hello.html?
-[cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(652): [client 172.17.0.1:55734] AH00763: cache: running CACHE_OUT filter
-[cache:debug] [pid 1263:tid 139943808571136] mod_cache.c(681): [client 172.17.0.1:55734] AH00764: cache: serving /hello.html
+[Thu May 03 10:57:09.268606 2018] [ssl:info] [pid 37:tid 139774954211072] [client 172.17.0.1:48190] AH01964: Connection to child 88 established (server localhost:443)
+[Thu May 03 10:57:09.268907 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2115): [client 172.17.0.1:48190] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 10:57:09.268939 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2115): [client 172.17.0.1:48190] AH02043: SSL virtual host for servername localhost found
+[Thu May 03 10:57:09.268947 2018] [core:debug] [pid 37:tid 139774954211072] protocol.c(2219): [client 172.17.0.1:48190] AH03155: select protocol from , choices=h2,http/1.1 for server localhost
+[Thu May 03 10:57:09.269898 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(2042): [client 172.17.0.1:48190] AH02041: Protocol: TLSv1.2, Cipher: ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)
+[Thu May 03 10:57:09.270415 2018] [ssl:debug] [pid 37:tid 139774954211072] ssl_engine_kernel.c(366): [client 172.17.0.1:48190] AH02034: Initial (No.1) HTTPS request received for child 88 (server localhost:443)
+[Thu May 03 10:57:09.270484 2018] [authz_core:debug] [pid 37:tid 139774954211072] mod_authz_core.c(809): [client 172.17.0.1:48190] AH01626: authorization result of Require all granted: granted
+[Thu May 03 10:57:09.270493 2018] [authz_core:debug] [pid 37:tid 139774954211072] mod_authz_core.c(809): [client 172.17.0.1:48190] AH01626: authorization result of <RequireAny>: granted
+[Thu May 03 10:57:09.270536 2018] [cache:debug] [pid 37:tid 139774954211072] cache_storage.c(666): [client 172.17.0.1:48190] AH00698: cache: Key for entity /webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT is https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
+[Thu May 03 10:57:09.270599 2018] [cache_disk:debug] [pid 37:tid 139774954211072] mod_cache_disk.c(573): [client 172.17.0.1:48190] AH00709: Recalled cached URL info header https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
+[Thu May 03 10:57:09.270612 2018] [cache_disk:debug] [pid 37:tid 139774954211072] mod_cache_disk.c(897): [client 172.17.0.1:48190] AH00720: Recalled headers for URL https://localhost:443/webjars/springfox-swagger-ui/swagger-ui-bundle.js?v=2.8.0-SNAPSHOT
+[Thu May 03 10:57:14.180226 2018] [ssl:debug] [pid 37:tid 139774945818368] ssl_engine_io.c(1044): [remote 172.17.0.1:48190] AH02001: Connection closed to child 88 with standard shutdown (server localhost:443)
+
 ----
 
 Si modificamos el fichero _/opt/sample-app/hello.html_ veremos que el apache sigue sirviendo el

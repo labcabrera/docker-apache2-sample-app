@@ -1,6 +1,5 @@
 #!/bin/bash
 
-service apache2 restart
-#service apache-htcacheclean start
+service apache2 restart 
 
-ruby -run -e httpd /opt/sample-app -p 8080
+java -jar /opt/sample-app/http-network-diagnostic-1.0.3.jar
